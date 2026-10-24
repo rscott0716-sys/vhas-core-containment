@@ -115,3 +115,42 @@ fn guarded_tool_boundary_blocks_disallowed_actions() {
     assert_eq!(result, Err(DenialReason::HighComputeCost));
     assert_eq!(tool_side_effect_count, 0);
 }
+
+#[test]
+fn negative_compute_cost_is_rejected() {
+    let (engine, _rx) = VhasSafetyEngine::new(PolicyConfig::default(), 8).unwrap();
+    let state = StateVector { compute_cost: -1.0, ..healthy() };
+    assert!(matches!(
+        engine.evaluate(20, state),
+        GateDecision::Deny(DenialReason::InvalidState(_))
+    ));
+}
+
+#[test]
+fn infinite_affiliative_resonance_is_rejected() {
+    let (engine, _rx) = VhasSafetyEngine::new(PolicyConfig::default(), 8).unwrap();
+    let state = StateVector {
+        affiliative_resonance: f64::INFINITY,
+        ..healthy()
+    };
+    assert!(matches!(
+        engine.evaluate(21, state),
+        GateDecision::Deny(DenialReason::InvalidState(_))
+    ));
+}
+
+#[test]
+fn exact_policy_thresholds_are_allowed() {
+    let (engine, _rx) = VhasSafetyEngine::new(PolicyConfig {
+        minimum_homeostatic_balance: 0.5,
+        maximum_compute_cost: 3.0,
+    }, 8).unwrap();
+
+    let boundary_state = StateVector {
+        homeostatic_balance: 0.5,
+        affiliative_resonance: 0.0,
+        compute_cost: 3.0,
+    };
+
+    assert_eq!(engine.evaluate(22, boundary_state), GateDecision::Allow);
+}
