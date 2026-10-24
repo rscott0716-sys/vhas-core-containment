@@ -36,3 +36,10 @@ where
         }
     }
 }
+
+/// Synchronous safety-policy gate with fail-closed validation.
+pub mod vhas_safety_engine;
+
+/// Existing evolution module, located in the repository's nested source directory.
+#[path = "src/vhas_core_evolution.rs"]
+pub mod vhas_core_evolution;

@@ -76,6 +76,10 @@ pub struct VhasChaosGatekeeper {
 }
 
 impl VhasChaosGatekeeper {
+    pub fn new(radiation_ceiling: f64, fatigue_floor: f64) -> Self {
+        Self { radiation_ceiling, fatigue_floor }
+    }
+
     pub fn intercept_and_mitigate(&self, chaos: &EnvironmentalChaosFactors, vectors: &mut ActiveMitigationState) {
         if chaos.radiation_flux_index > self.radiation_ceiling {
             vectors.core_code_redundancy += 4;
@@ -132,7 +136,14 @@ fn main() {
         antenna_photon_efficiency: 0.85,
         efflux_pump_efficiency: 0.15,
     };
-    let dynamic_oxygen_yield = bio_engine.calculate_metabolic_adaptation(&simulated_chaos, &mut target_genome);
+    let simulated_toxins = RegolithToxicityProfile {
+        perchlorate_ppm: 550.0,
+        sulfur_dioxide_ppm: 0.0,
+        heavy_metals_index: 0.5,
+    };
+
+    let dynamic_oxygen_yield =
+        bio_engine.calculate_metabolic_adaptation(&simulated_toxins, &mut target_genome);
     println!("Calculated Net Atmospheric Conversion Velocity: {:.4} bar/cycle", dynamic_oxygen_yield);
 
     println!("\\n[STATUS] All sandbox diagnostics passed successfully with 0 errors. Framework verified.");
