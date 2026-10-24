@@ -1,0 +1,13 @@
+# Cargo.toml
+[package]
+name = "vhas_core"
+version = "9.0.0"
+edition = "2021"
+
+[dependencies]
+# Required for the thread-safe global state vector metric updates
+lazy_static = "1.4.0"
+
+[lib]
+name = "vhas_core"
+path = "src/vhas_core_fast_gate.rs"
