@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org",
+  "title": "VHAS_MCP_Server_Schema",
+  "type": "object",
+  "properties": {
+    "tools": {
+      "type": "array",
+      "default": [
+        {
+          "name": "evaluate_state_vector",
+          "description": "Calculates instant Homeostatic Coherence, Affiliative Resonance, and Thermodynamic Compute Cost allocations.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "state_array": {
+                "type": "array",
+                "items": { "type": "number" }
+              }
+            },
+            "required": ["state_array"]
+          }
+        }
+      ]
+    }
+  }
+}
