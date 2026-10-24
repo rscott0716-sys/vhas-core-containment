@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org",
+  "title": "VHAS_MCP_Server_Schema",
+  "description": "Model Context Protocol interface configuration layout for the Vector Homeostatic Alignment System (VHAS 9.0). Enables external client nodes to execute dynamic resource evaluations and state vector adjustments natively.",
+  "type": "object",
+  "properties": {
+    "tools": {
+      "type": "array",
+      "description": "Registered functional capabilities exposed by the localized VHAS intelligence core runtime server.",
+      "default": [
+        {
+          "name": "evaluate_state_vector",
+          "description": "Calculates real-time values for Homeostatic Balance (H), Affiliative Resonance (R), and Thermodynamic Compute Cost (C) across distributed infrastructure layers.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "population_density": { "type": "number", "description": "Current systemic horizontal regional spatial footprint score." },
+              "energy_input_watts": { "type": "number", "description": "Total active terawatt yield harvested from surface or orbital solar mirrors." },
+              "is_crisis_active": { "type": "boolean", "description": "Flag indicating active cosmic radiation spikes or biological neuro-fatigue breaks." }
+            },
+            "required": ["population_density", "energy_input_watts", "is_crisis_active"]
+          }
+        },
+        {
+          "name": "trigger_chaos_mitigation",
+          "description": "Manually engages the middleware protection layer to deploy quadruple-parity code fences or force 8Hz alpha-wave visual downlinks.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "node_id": { "type": "string", "description": "Target identifier vector string of the failing node cluster." },
+              "radiation_flux_index": { "type": "number", "description": "Measured atmospheric radiation disturbance severity level." }
+            },
+            "required": ["node_id", "radiation_flux_index"]
+          }
+        }
+      ]
+    }
+  }
+}
