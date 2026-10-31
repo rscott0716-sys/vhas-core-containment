@@ -31,9 +31,10 @@ def assert_no_deployment(engine):
 def test_missing_action_target_does_not_deploy():
     engine = make_engine([{}])
 
-    with pytest.raises(KeyError):
-        engine.run_evolution_cycle(1.0, 1.0, 0.89)
+    result = engine.run_evolution_cycle(1.0, 1.0, 0.89)
 
+    assert result["status"] == "review_required"
+    assert result["errors"]
     engine.autonomous_policy.evaluate.assert_not_called()
     engine.correction_core.run_pipeline_validation.assert_not_called()
     assert_no_deployment(engine)
@@ -45,9 +46,10 @@ def test_missing_policy_eligibility_does_not_deploy():
         policy_result={"approved": False},
     )
 
-    with pytest.raises(KeyError):
-        engine.run_evolution_cycle(1.0, 1.0, 0.89)
+    result = engine.run_evolution_cycle(1.0, 1.0, 0.89)
 
+    assert result["status"] == "review_required"
+    assert result["errors"]
     engine.correction_core.run_pipeline_validation.assert_not_called()
     assert_no_deployment(engine)
 
@@ -58,9 +60,10 @@ def test_policy_exception_does_not_deploy():
         "Policy unavailable"
     )
 
-    with pytest.raises(RuntimeError):
-        engine.run_evolution_cycle(1.0, 1.0, 0.89)
+    result = engine.run_evolution_cycle(1.0, 1.0, 0.89)
 
+    assert result["status"] == "review_required"
+    assert result["errors"]
     engine.correction_core.run_pipeline_validation.assert_not_called()
     assert_no_deployment(engine)
 
@@ -78,9 +81,11 @@ def test_validation_exception_does_not_deploy():
         "Validation unavailable"
     )
 
-    with pytest.raises(RuntimeError):
-        engine.run_evolution_cycle(1.0, 1.0, 0.89)
+    result = engine.run_evolution_cycle(1.0, 1.0, 0.89)
 
+    assert result["status"] == "review_required"
+    assert result["errors"]
+    engine.correction_core.run_pipeline_validation.assert_called_once()
     assert_no_deployment(engine)
 
 
